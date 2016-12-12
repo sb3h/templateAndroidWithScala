@@ -1,0 +1,133 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        maven {url "https://dl.bintray.com/wire-android/third-party"}
+		maven{url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.wire:gradle-android-scala-plugin:1.5.0'
+
+    }
+}
+
+allprojects {
+    repositories {
+        maven {url "https://dl.bintray.com/wire-android/third-party"}
+		maven{url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    majorVersion = "2.24."
+
+    compileSdkVersion = 24
+    minSdkVersion = 17
+    targetSdkVersion = 23
+    buildToolsVersion = '24.0.2'
+    scalaMajorVersion = '2.11'
+    scalaVersion = scalaMajorVersion + '.8'
+    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
+    targetCompatibilityVersion = JavaVersion.VERSION_1_7
+    preDexLibs = !project.hasProperty('disablePreDex')
+
+    checkstyleVersion = '6.18'
+    pmdVersion = '5.4.1'
+    supportLibVersion = '24.0.0'
+    playServicesVersion = '10.0.1'
+
+    audioVersion = System.getenv("AUDIO_VERSION") ?: '1.205.0@aar'
+
+    zMessagingDevVersionBase = '87.1311'
+    zMessagingDevVersion = "${zMessagingDevVersionBase}@aar"
+    // Release version number must be like this X.0(.Y)
+    zMessagingReleaseVersion = System.getenv("ZMESSAGING_VERSION") ?: '87.2.317@aar'
+
+    avsVersion = '2.9.69@aar'
+    avsInternalVersion = avsVersion //leave this here in case we want to test specific AVS versions on internal
+    avsName = 'avs'
+    avsGroup = 'com.wire'
+
+    // proprietary avs artifact configuration
+    customAvsVersion = '2.9.17@aar'
+    customAvsInternalVersion = customAvsVersion
+    customAvsName = 'avs'
+    customAvsGroup = 'com.wearezeta.avs'
+
+    deps = [
+            scala               : "org.scala-lang:scala-library:$scalaVersion",
+
+            // Lint dependencies
+            lintapi              : 'com.android.tools.lint:lint-api:24.5.0',
+            lintchecks           : 'com.android.tools.lint:lint-checks:24.5.0',
+
+            // Checkstyle dependencies
+            checkstyleapi        : "com.puppycrawl.tools:checkstyle:$checkstyleVersion",
+
+            // Support libs
+            multidex             : "com.android.support:multidex:1.0.1",
+            supportv4            : "com.android.support:support-v4:$supportLibVersion",
+            supportv13           : "com.android.support:support-v13:$supportLibVersion",
+            supportdesign        : "com.android.support:design:$supportLibVersion",
+            appcompatv7          : "com.android.support:appcompat-v7:$supportLibVersion",
+            recyclerview         : "com.android.support:recyclerview-v7:$supportLibVersion",
+            supportannotations   : "com.android.support:support-annotations:$supportLibVersion",
+            preferences          : "com.android.support:preference-v7:$supportLibVersion",
+            cardview             : "com.android.support:cardview-v7:$supportLibVersion",
+
+            // Play services
+            psBase               : "com.google.android.gms:play-services-base:$playServicesVersion",
+            psGcm                : "com.google.android.gms:play-services-gcm:$playServicesVersion",
+            psMaps               : "com.google.android.gms:play-services-maps:$playServicesVersion",
+            psLocation           : "com.google.android.gms:play-services-location:$playServicesVersion",
+
+
+            // Other
+            roundedimageview     : 'com.makeramen:roundedimageview:2.2.0',
+            timber               : 'com.jakewharton.timber:timber:4.1.1',
+            hockey               : 'net.hockeyapp.android:HockeySDK:3.7.2',
+            threetenabp          : 'com.jakewharton.threetenabp:threetenabp:1.0.3',
+            localytics           : 'com.localytics.android:library:3.8.2',
+            rebound              : 'com.facebook.rebound:rebound:0.3.8',
+            supportpreferences   : 'net.xpece.android:support-preference:0.8.1',
+
+            // For spotify
+            spotifyAuth          : 'com.wire:spotify-auth:1.0.0-beta13@aar',
+
+            // Internal
+            audioNotifications   : "com.wire:audio-notifications:$audioVersion",
+
+            // Test dependencies
+            junit               : 'junit:junit:4.12',
+            testutils           : "com.wire:testutils:$zMessagingDevVersionBase",
+            scalatest           : "org.scalatest:scalatest_$scalaMajorVersion:2.2.6",
+            testRunner          : 'com.android.support.test:runner:0.4.1',
+            testRules           : 'com.android.support.test:rules:0.4.1',
+            espresso            : 'com.android.support.test.espresso:espresso-core:2.2',
+            espressoIntents     : 'com.android.support.test.espresso:espresso-intents:2.2',
+            hamcrestCore        : 'org.hamcrest:hamcrest-core:1.3',
+            hamcrestLib         : 'org.hamcrest:hamcrest-library:1.3',
+            hamcrestIntegration : 'org.hamcrest:hamcrest-integration:1.3',
+
+            mockitoCore         : 'org.mockito:mockito-core:1.10.19',
+            //The dexmaker stuff is needed for Mockito to work completely
+            dexmaker            : 'com.crittercism.dexmaker:dexmaker:1.4',
+            dexmakerDx          : 'com.crittercism.dexmaker:dexmaker-dx:1.4',
+            dexmakerMockito     : 'com.crittercism.dexmaker:dexmaker-mockito:1.4',
+
+            // Translations
+            translations        : 'com.wire:wiretranslations:1.+',
+
+            //Json parser
+            gson                : 'com.google.code.gson:gson:2.2.4'
+    ]
+}
+
+apply from: rootProject.file('dependencies.gradle')
